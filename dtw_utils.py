@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[ ]:
+
+
+from dtw import dtw, rabinerJuangStepPattern
+
+def DTW_function(reference_data, target_data, parameter, start_idx, end_idx):
+    """
+    Perform Dynamic Time Warping (DTW) on the specified parameter.
+    """
+    query = reference_data[parameter].values[start_idx:end_idx]
+    template = target_data[parameter].values[start_idx:end_idx]
+
+    alignment = dtw(query, template, keep_internals=True, step_pattern=rabinerJuangStepPattern(6, "c"))
+    indices = alignment.index2  # Warping indices
+    return query, template, alignment, indices
+
+def warp_function(data, indices, parameter):
+    """
+    Warp the specified parameter using DTW indices.
+    """
+    return data[parameter].values[indices]
+

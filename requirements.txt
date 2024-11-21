@@ -1,0 +1,10 @@
+numpy                 # Numerical operations
+pandas                # Data manipulation and analysis
+matplotlib            # Plotting and visualization
+statistics            # Standard statistical calculations
+scikit-learn          # Preprocessing, model evaluation, and metrics
+tensorflow            # Deep learning models
+tensorflow-probability # Probabilistic layers for Bayesian Neural Networks
+keras                 # High-level deep learning API
+dtw-python            # Dynamic Time Warping
+scipy                 # Scientific computing and statistical tests
