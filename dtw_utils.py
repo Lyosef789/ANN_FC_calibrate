@@ -1,4 +1,4 @@
-from dtw import dtw, rabinerJuangStepPattern
+from dtw import *
 
 def DTW_function(reference_data, target_data, parameter, start_idx, end_idx):
     """
