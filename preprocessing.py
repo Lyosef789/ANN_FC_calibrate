@@ -20,7 +20,7 @@ def preprocess_data(filepath):
     data = data.rename(columns={
         data.columns[0]: "Epoch",
         data.columns[1]: "PROTON_BULK_SPEED",  # Speed
-        data.columns[2]: "P+_W_NONLIN",       # Non-linear parameter
+        data.columns[2]: "P+_W_NONLIN",       # Temp
         data.columns[3]: "P+_DENSITY",        # Density
         data.columns[4]: "BX",
         data.columns[5]: "BY",
