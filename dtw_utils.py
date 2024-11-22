@@ -9,7 +9,7 @@ def DTW_function(reference_data, target_data, parameter, start_idx, end_idx):
 
     alignment = dtw(query, template, keep_internals=True, step_pattern=rabinerJuangStepPattern(6, "c"))
     #indices = alignment.index2  # Warping indices
-    indices = warp(alignment_wd_,index_reference=False) 
+    indices = warp(alignment, index_reference=False) 
     
     return query, template, alignment, indices
 
