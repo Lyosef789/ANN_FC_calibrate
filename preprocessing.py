@@ -3,12 +3,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
 
+
 def preprocess_reference(filepath):
     """
     Preprocess reference (Wind) data with filtering, resampling, and interpolation.
     """
     # Load the original Wind data
-    data = pd.read_csv(filepath, delimiter=',', parse_dates=[0], infer_datetime_format=True, na_values='-1.00000e+31')
+    data = pd.read_csv(filepath, delimiter=',', comment='#',parse_dates=[0], infer_datetime_format=True,na_values='-1.00000e+31')
 
     # Rename columns
     data = data.rename(columns={
@@ -59,7 +60,7 @@ def preprocess_target(filepath):
     Preprocess target (DSCOVR) data with filtering, resampling, and interpolation.
     """
     # Load the DSCOVR data
-    data = pd.read_csv(filepath, delimiter=',', parse_dates=[0], infer_datetime_format=True, na_values='-1.00000e+31')
+    data = pd.read_csv(filepath, delimiter=',', comment='#',parse_dates=[0], infer_datetime_format=True,na_values='-1.00000e+31')
 
     # Remove rows where all columns (4:54) are zero
     zero_mask = (((data.iloc[:, 4:54]).values) == 0).all(axis=1)
@@ -81,6 +82,7 @@ def preprocess_target(filepath):
     data = data.interpolate(method="linear")
 
     return data
+
 
 
 def prepare_inputs(target_data, warped_reference, start_idx, end_idx, parameter):
