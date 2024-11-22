@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 from dtw import dtw, rabinerJuangStepPattern
 
 def DTW_function(reference_data, target_data, parameter, start_idx, end_idx):

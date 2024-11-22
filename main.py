@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 from preprocessing import preprocess_data, prepare_inputs, standardize_data
 from dtw_utils import DTW_function, warp_function
 from model import create_bnn_model
