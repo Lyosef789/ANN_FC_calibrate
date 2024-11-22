@@ -2,43 +2,86 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-def preprocess_data(filepath):
-    """
-    Preprocess data dynamically based on the provided file path.
-    """
-    # Read the file
-    data = pd.read_csv(
-        filepath,
-        delimiter=',',
-        comment='#',
-        parse_dates=[0],
-        infer_datetime_format=True,
-        na_values='-1.00000e+31'
-    )
 
-    # Rename columns based on your convention
+def preprocess_reference(filepath):
+    """
+    Preprocess reference (Wind) data with filtering, resampling, and interpolation.
+    """
+    # Load the original Wind data
+    data = pd.read_csv(filepath, delimiter=',', parse_dates=[0], infer_datetime_format=True, na_values='-1.00000e+31')
+
+    # Rename columns
     data = data.rename(columns={
         data.columns[0]: "Epoch",
-        data.columns[1]: "PROTON_BULK_SPEED",  # Speed
-        data.columns[2]: "P+_W_NONLIN",       # Temp
-        data.columns[3]: "P+_DENSITY",        # Density
-        data.columns[4]: "BX",
-        data.columns[5]: "BY",
-        data.columns[6]: "BZ"
+        data.columns[1]: "Speed",
+        data.columns[2]: "Temp",
+        data.columns[3]: "Density",
+        data.columns[4]: "bx",
+        data.columns[5]: "by",
+        data.columns[6]: "bz"
     })
 
-    # Drop rows with missing values
+    # Drop missing values
     data = data.dropna()
 
-    # Apply filtering for known parameter ranges
-    data = data[data["PROTON_BULK_SPEED"].between(200, 900)]  # Speed
-    data = data[data["P+_W_NONLIN"].between(10, 150)]         # Temperature
-    data = data[data["P+_DENSITY"].between(0.1, 50)]          # Density
-    data = data[data["BX"].between(-100, 100)]               # Magnetic field X
-    data = data[data["BY"].between(-100, 100)]               # Magnetic field Y
-    data = data[data["BZ"].between(-100, 100)]               # Magnetic field Z
+    # Apply filtering for known ranges
+    data = data[data["Speed"].between(200, 900)]
+    data = data[data["Temp"].between(10, 150)]
+    data = data[data["Density"].between(0.1, 50)]
+    data = data[data["bx"].between(-100, 100)]
+    data = data[data["by"].between(-100, 100)]
+    data = data[data["bz"].between(-100, 100)]
+
+    # Save the cleaned data to a new CSV file
+    cleaned_filepath = filepath.replace(".csv", "_final.csv")
+    data.to_csv(cleaned_filepath, index=False)
+
+    # Reload the cleaned data
+    data = pd.read_csv(
+        cleaned_filepath, 
+        delimiter=',', 
+        parse_dates=[0], 
+        infer_datetime_format=True, 
+        date_parser=lambda col: pd.to_datetime(col, utc=True),
+        na_values='-1.00000e+31'
+    )
+    data = data.rename(columns={data.columns[0]: "Epoch_time"})
+
+    # Resample and interpolate to fill gaps
+    data = data.resample('160s', on='Epoch_time').median()
+    data = data.interpolate(method="linear")
 
     return data
+
+
+def preprocess_target(filepath):
+    """
+    Preprocess target (DSCOVR) data with filtering, resampling, and interpolation.
+    """
+    # Load the DSCOVR data
+    data = pd.read_csv(filepath, delimiter=',', parse_dates=[0], infer_datetime_format=True, na_values='-1.00000e+31')
+
+    # Remove rows where all columns (4:54) are zero
+    zero_mask = (((data.iloc[:, 4:54]).values) == 0).all(axis=1)
+    data = data[~zero_mask]
+
+    # Drop missing values
+    data = data.dropna()
+
+    # Rename columns
+    data = data.rename(columns={
+        data.columns[0]: "t",
+        data.columns[1]: "bx",
+        data.columns[2]: "by",
+        data.columns[3]: "bz"
+    })
+
+    # Resample and interpolate
+    data = data.resample('160s', on='t').median()
+    data = data.interpolate(method="linear")
+
+    return data
+
 
 def prepare_inputs(target_data, warped_reference, start_idx, end_idx, parameter):
     """
