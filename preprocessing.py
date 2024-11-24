@@ -90,7 +90,7 @@ def prepare_inputs(target_data, warped_reference, start_idx, end_idx, parameter)
     Prepare input data for the BNN model based on the parameter.
     """
     # Select relevant columns for inputs and targets
-    target_inputs_ = target_data.iloc[:, 3:53].values  # Assuming columns 3:53 contain features
+    target_inputs_ = (target_data.iloc[:, 3:53]).values  # Assuming columns 3:53 contain features
     reference_inputs_=np.transpose([warped_reference])
     
     target_inputs=target_inputs_[start_idx:(end_idx), :]
