@@ -85,7 +85,7 @@ def preprocess_target(filepath):
 
 
 
-def prepare_inputs(target_data, warped_reference, start_idx, end_idx, parameter):
+def prepare_inputs(target_data, warped_reference, start_idx, end_idx):
     """
     Prepare input data for the BNN model based on the parameter.
     """
