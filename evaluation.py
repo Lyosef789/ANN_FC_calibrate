@@ -22,9 +22,9 @@ def run_experiment(model, reference_train, target_train, max_value, num_epochs=5
     model.fit(reference_train, target_train, epochs=num_epochs, batch_size=batch_size, verbose=1)
     print("Training complete.")
 
-def evaluate_non_warped(reference_data, start_idx, end_idx, parameter):
+def evaluate_non_warped(reference_data, parameter):
     """
     Extract non-warped values for the first month.
     """
-    return reference_data[parameter].values[start_idx:end_idx]
+    return reference_data[parameter].values
 
