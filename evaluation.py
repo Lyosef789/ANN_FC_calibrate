@@ -12,7 +12,7 @@ def run_experiment(model, reference_train, target_train, max_value, num_epochs=5
     # Compile the model
     model.compile(
         optimizer=tf.keras.optimizers.Adam(),
-        loss=lambda targets, preds: improved_penalized_nll(targets, preds, max_value),
+        loss=lambda targets, preds: improved_penalized_nll(targets, preds, max_value), metrics=['mae','mse']
     )
 
     # Train the model
