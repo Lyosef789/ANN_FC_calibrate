@@ -1,18 +1,20 @@
 import tensorflow as tf
+from model import improved_penalized_nll
 
+ # Register the custom loss function
+tf.keras.utils.get_custom_objects()['improved_penalized_nll'] = improved_penalized_nll
+
+    
 def run_experiment(model, reference_train, target_train, max_value, num_epochs=50, batch_size=20):
     """
     Train the Bayesian Neural Network model.
     """
-    from model import improved_penalized_nll
-
-    # Register the custom loss function
-    tf.keras.utils.get_custom_objects()['improved_penalized_nll'] = lambda targets, preds: improved_penalized_nll(targets, preds, max_value)
-
+    
+   
     # Compile the model
     model.compile(
         optimizer=tf.keras.optimizers.Adam(),
-        loss=lambda targets, preds: improved_penalized_nll(targets, preds, max_value), metrics=['mae','mse']
+        loss='improved_penalized_nll', metrics=['mae','mse']
     )
 
     # Train the model
