@@ -33,7 +33,7 @@ def evaluate_month(model, reference_scaler, target_scaler, reference_data, start
     from dtw_utils import DTW_function
 
     # Perform DTW for the given month
-    query, template, alignment, indices = DTW_function(reference_data, reference_data, parameter, start_idx, end_idx)
+    query, template, alignment, indices = DTW_function(reference_data, target_data, parameter, start_idx, end_idx)
     warped_values = reference_data[parameter].values[indices]
 
     # Standardize the inputs

@@ -1,4 +1,4 @@
-from preprocessing import preprocess_data, prepare_inputs, standardize_data
+from preprocessing import preprocess_reference, preprocess_target, prepare_inputs, standardize_data
 from dtw_utils import DTW_function, warp_function
 from model import create_bnn_model
 from evaluation import run_experiment, evaluate_non_warped, evaluate_month
@@ -17,11 +17,11 @@ def main():
     wind_file, dscovr_file, parameter, year, train_start, train_end, eval_start, eval_end, future_month_indices = prompt_user_for_inputs()
 
     # Step 2: Get max_value for the parameter
-    max_value = parameter_max_values.get(parameter, 1)  # Default to 1 if parameter not listed
+    max_value = parameter_max_values.get(parameter, 1)
 
     # Step 3: Data Preprocessing
-    reference_data = preprocess_data(wind_file)
-    target_data = preprocess_data(dscovr_file)
+    reference_data = preprocess_reference(wind_file)
+    target_data = preprocess_target(dscovr_file)
 
     print(f"Processing year {year}, parameter '{parameter}'")
 
@@ -61,4 +61,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
