@@ -2,7 +2,7 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 from tensorflow.keras import layers
 from tensorflow.keras.layers import LayerNormalization
-
+import numpy as np
 
 
 tfd = tfp.distributions
