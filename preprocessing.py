@@ -90,9 +90,13 @@ def prepare_inputs(target_data, warped_reference, start_idx, end_idx, parameter)
     Prepare input data for the BNN model based on the parameter.
     """
     # Select relevant columns for inputs and targets
-    inputs = target_data.iloc[:, 3:53].values  # Assuming columns 3:53 contain features
-    outputs = warped_reference[start_idx:end_idx]
-    return inputs[start_idx:end_idx, :], outputs.reshape(-1, 1)
+    inputs_ = target_data.iloc[:, 3:53].values  # Assuming columns 3:53 contain features
+    outputs_=np.transpose([warped_reference])
+    
+    inputs=inputs_[start_idx:end_idx]
+    outputs = outputs_[start_idx:end_idx]
+    
+    return inputs, outputs
 
 def standardize_data(inputs_reference, outputs_target):
     """
@@ -103,12 +107,29 @@ def standardize_data(inputs_reference, outputs_target):
     target_scaler = StandardScaler()
 
     # Standardize inputs and outputs
-    inputs_reference_scaled = predictor_scaler.fit_transform(inputs_reference)
-    outputs_target_scaled = target_scaler.fit_transform(outputs_target)
+    inputs_reference_scaled_ = predictor_scaler.fit(inputs_reference)
+    outputs_target_scaled_ = target_scaler.fit(outputs_target)
 
+    inputs_reference_scaled=inputs_reference_scaled_.transform(inputs_reference)
+    outputs_target_scaled=outputs_target_scaled_.transform(outputs_target)
+    
+    
     # Split into training and testing datasets
     reference_train, reference_test, target_train, target_test = train_test_split(
         inputs_reference_scaled, outputs_target_scaled, test_size=0.3, random_state=42
     )
+    
+    print(reference_train.shape)
+    print(target_train.shape)
+    print(reference_test.shape)
+    print(target_test.shape)
+    
+        
+    return inputs_reference_scaled_, outputs_target_scaled_, inputs_reference_scaled, outputs_target_scaled, reference_train, reference_test, target_train, target_test  
+        
+        
+        
+        
+        
+        
 
-    return reference_train, target_train, predictor_scaler, target_scaler

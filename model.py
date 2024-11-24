@@ -65,18 +65,12 @@ def improved_penalized_nll(targets, estimated_distribution, threshold=1, min_val
         tf.zeros_like(base_nll)  # No penalty for accurate or overestimating predictions
     )
 
-    # Penalize predictions below a threshold
-    threshold_penalty = tf.where(
-        mean_predictions < threshold,  # Penalize predictions below threshold
-        tf.math.abs(mean_predictions - threshold) ** 2,  # Quadratic penalty for threshold
-        tf.zeros_like(base_nll)  # No penalty for valid predictions
-    )
-
     # Normalize the penalty to avoid excessively large loss values
-    scaled_penalty = (underestimation_penalty + threshold_penalty) / (max_val - min_val)
+    scaled_penalty = underestimation_penalty / (max_val - min_val)
 
     # Combine the base NLL with the scaled penalty
     total_loss = base_nll + scaled_penalty
 
     # Return the mean loss over all data points
     return tf.reduce_mean(total_loss)
+

@@ -41,9 +41,10 @@ def evaluate_month(model, reference_scaler, target_scaler, reference_data, start
 
     # Predict using the trained model
     predictions_distribution = model(standardized_inputs)
-    predictions_mean = predictions_distribution.mean().numpy()
+    predictions_mean = predictions_distribution.mean().numpy().tolist()
+    predictions_stdv = predictions_distribution.stddev().numpy()
 
     # Inverse scale predictions
-    predictions_final = target_scaler.inverse_transform(predictions_mean).flatten()
+    predictions_final = target_scaler.inverse_transform(predictions_mean)
 
     return predictions_final

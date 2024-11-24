@@ -33,8 +33,12 @@ def main():
     inputs_reference, outputs_target = prepare_inputs(target_data, warped_reference, train_start, train_end, parameter)
 
     # Step 6: Standardize Data
-    reference_train, target_train, reference_scaler, target_scaler = standardize_data(inputs_reference, outputs_target)
+    #reference_train, target_train, reference_scaler, target_scaler = standardize_data(inputs_reference, outputs_target)
 
+    reference_scaler, target_scaler, inputs_reference_scaled, outputs_target_scaled, reference_train, reference_test, target_train, target_test = standardize_data(inputs_reference, outputs_target)
+    
+    
+    
     # Step 7: Model Training
     train_size = reference_train.shape[0]
     bnn_model = create_bnn_model(train_size)
