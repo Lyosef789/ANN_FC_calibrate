@@ -49,4 +49,4 @@ def evaluate_month(model, reference_scaler, target_scaler, reference_data, start
     # Inverse scale predictions
     predictions_final = target_scaler.inverse_transform(predictions_mean)
 
-    return predictions_final
+    return predictions_distribution, predictions_mean, predictions_stdv, predictions_final
